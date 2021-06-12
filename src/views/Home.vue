@@ -1,16 +1,22 @@
 <template>
-  <hello-world />
+  <div id="app">
+<!--    <Suspense>-->
+<!--      <template #default>-->
+        <MailScreen />
+<!--      </template>-->
+<!--      <template #fallback> Loading... </template>-->
+<!--    </Suspense>-->
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import HelloWorld from "../components/HelloWorld.vue";
+import { defineComponent } from "@vue/composition-api";
+import MailScreen from "../components/MailScreen.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "Home",
-
   components: {
-    HelloWorld,
+    MailScreen,
   },
 });
 </script>
