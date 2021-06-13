@@ -8,11 +8,12 @@
           :class="[email.read ? 'read' : '', 'clickable']"
         >
           <td>
-            <input
-              type="checkbox"
-              :checked="emailSelection.emails.includes(email)"
+            <v-checkbox
+              class="ml-2"
+              color="indigo"
+              :value="emailSelection.emails.includes(email)"
               @click="emailSelection.toggle(email)"
-            />
+            ></v-checkbox>
           </td>
           <td @click="openEmail(email)">{{ email.from }}</td>
           <td @click="openEmail(email)">

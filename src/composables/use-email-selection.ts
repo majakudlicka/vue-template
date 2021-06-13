@@ -1,6 +1,6 @@
-import { reactive, ref } from "@vue/composition-api";
+import { reactive } from "@vue/composition-api";
 import axios from "axios";
-import _ from 'lodash';
+import _ from "lodash";
 import { IEmail } from "../types/email";
 
 const emailSet: Array<IEmail> = [];
@@ -27,27 +27,20 @@ export const useEmailSelection = function (): {
     });
   };
   const clear = () => {
-    emails.pop();
-    emails.pop();
-    emails.pop();
-    emails.pop();
-    console.log('emails afet clear ', emails);
+    emails.splice(0, emails.length);
   };
-  const toggle = (id: IEmail) => {
-    if (emails.includes(id)) {
-      _.remove(emails, id);
-      // emails.delete(id);
+  const toggle = (email: IEmail) => {
+    if (emails.includes(email)) {
+      const index = _.findIndex(emails, email);
+      emails.splice(index, 1);
     } else {
-      emails.push(id);
+      emails.push(email);
     }
   };
   const addMultiple = (newEmails: IEmail[]) => {
-    console.log('in add multiple');
     newEmails.forEach((email) => {
       emails.push(email);
     });
-    console.log(newEmails);
-    console.log('emails ', emails);
   };
   const markRead = () => {
     forSelected((e: IEmail) => (e.read = true));
@@ -65,7 +58,7 @@ export const useEmailSelection = function (): {
   };
 
   return {
-    emails: reactive(emails),
+    emails,
     clear,
     toggle,
     addMultiple,

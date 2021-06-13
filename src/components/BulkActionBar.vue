@@ -1,52 +1,53 @@
 <template>
   <div class="bulk-action-bar">
-    <!--		Checkboxes are not available in Vuetify alpha :( -->
-    <span class="checkbox">
-      <input
-        type="checkbox"
-        :checked="allAreSelected"
-        :class="[partialSelection ? 'partial-check' : '']"
-        @click="bulkSelect"
-      />
-    </span>
-    <span class="buttons">
-      <v-btn
-        outlined
-        size="small"
-        class="mr-1"
-        @click="emailSelection.markRead()"
-        :disabled="Array.from(emailSelection.emails).every((e) => e.read)"
-      >
-        Mark Read
-      </v-btn>
-      <v-btn
-        outlined
-        size="small"
-        class="mr-1"
-        @click="emailSelection.markUnread()"
-        :disabled="Array.from(emailSelection.emails).every((e) => !e.read)"
-      >
-        Mark Unread
-      </v-btn>
-      <v-btn
-        outlined
-        size="small"
-        v-if="selectedScreen === 'inbox'"
-        @click="emailSelection.archive()"
-        :disabled="numberSelected === 0"
-      >
-        Archive
-      </v-btn>
-      <v-btn
-        outlined
-        size="small"
-        v-else
-        @click="emailSelection.moveToInbox()"
-        :disabled="numberSelected === 0"
-      >
-        Move to Inbox
-      </v-btn>
-    </span>
+    <v-col>
+      <v-row align="center">
+        <v-checkbox
+          :indeterminate="partialSelection"
+          color="indigo"
+          :value="allAreSelected"
+          @click="bulkSelect"
+        ></v-checkbox>
+        <span class="buttons">
+          <v-btn
+            outlined
+            size="small"
+            class="mr-1"
+            @click="emailSelection.markRead()"
+            :disabled="Array.from(emailSelection.emails).every((e) => e.read)"
+          >
+            Mark Read
+          </v-btn>
+          <v-btn
+            outlined
+            size="small"
+            class="mr-1"
+            @click="emailSelection.markUnread()"
+            :disabled="Array.from(emailSelection.emails).every((e) => !e.read)"
+          >
+            Mark Unread
+          </v-btn>
+          <v-btn
+            outlined
+            size="small"
+            v-if="selectedScreen === 'inbox'"
+            @click="emailSelection.archive()"
+            :disabled="numberSelected === 0"
+          >
+            Archive
+          </v-btn>
+          <v-btn
+            outlined
+            size="small"
+            v-else
+            @click="emailSelection.moveToInbox()"
+            :disabled="numberSelected === 0"
+          >
+            Move to Inbox
+          </v-btn>
+        </span>
+      </v-row>
+    </v-col>
   </div>
 </template>
 

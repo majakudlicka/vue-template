@@ -123,7 +123,6 @@ input[type="checkbox"]:checked {
   max-width: 1000px;
   margin: auto;
   text-align: left;
-  padding-bottom: 10px;
 }
 .bulk-action-bar input {
   margin: 5px;
