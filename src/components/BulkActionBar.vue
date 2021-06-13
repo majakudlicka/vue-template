@@ -2,19 +2,13 @@
   <div class="bulk-action-bar">
     <v-col>
       <v-row align="center">
-        <v-checkbox
-          :indeterminate="partialSelection"
-          color="indigo"
-          :value="allAreSelected"
-          @click="bulkSelect"
-        ></v-checkbox>
         <span class="buttons">
           <v-btn
             outlined
             size="small"
             class="mr-1"
-            @click="emailSelection.markRead()"
-            :disabled="Array.from(emailSelection.emails).every((e) => e.read)"
+            @click="emailSelection.markRead(selectedEmails)"
+            :disabled="selectedEmails.every((e) => e.read)"
           >
             Mark Read
           </v-btn>
@@ -22,8 +16,8 @@
             outlined
             size="small"
             class="mr-1"
-            @click="emailSelection.markUnread()"
-            :disabled="Array.from(emailSelection.emails).every((e) => !e.read)"
+            @click="emailSelection.markUnread(selectedEmails)"
+            :disabled="selectedEmails.every((e) => !e.read)"
           >
             Mark Unread
           </v-btn>
@@ -31,7 +25,7 @@
             outlined
             size="small"
             v-if="selectedScreen === 'inbox'"
-            @click="emailSelection.archive()"
+            @click="emailSelection.archive(selectedEmails)"
             :disabled="numberSelected === 0"
           >
             Archive
@@ -40,7 +34,7 @@
             outlined
             size="small"
             v-else
-            @click="emailSelection.moveToInbox()"
+            @click="emailSelection.moveToInbox(selectedEmails)"
             :disabled="numberSelected === 0"
           >
             Move to Inbox
@@ -53,12 +47,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import { useEmailSelection } from "../composables/use-email-selection";
+import { useEmailUtils } from "../composables/use-email-utils";
 import { IEmail } from "../types/email";
 
 export default defineComponent({
   setup() {
-    const emailSelection = useEmailSelection();
+    const emailSelection = useEmailUtils();
     return {
       emailSelection,
     };
@@ -72,10 +66,14 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    selectedEmails: {
+      type: Array as PropType<IEmail[]>,
+      required: true,
+    },
   },
   computed: {
     numberSelected(): number {
-      return this.emailSelection.emails.length;
+      return this.selectedEmails.length;
     },
     allAreSelected(): boolean {
       return (
@@ -87,13 +85,7 @@ export default defineComponent({
     },
   },
   methods: {
-    bulkSelect(): void {
-      if (this.allAreSelected) {
-        this.emailSelection.clear();
-      } else {
-        this.emailSelection.addMultiple(this.emails);
-      }
-    },
+
   },
 });
 </script>

@@ -14,8 +14,12 @@
       Archived View
     </v-btn>
     <h1 class="mt-3">VMail {{ capitalize(selectedScreen) }}</h1>
-    <BulkActionBar :emails="filteredEmails" :selectedScreen="selectedScreen" />
-    <MailTable :emails="filteredEmails" />
+
+    <MailTable :emails="filteredEmails">
+      <template v-slot:default="slotProps">
+        <BulkActionBar :emails="filteredEmails" :selected-screen="selectedScreen" :selected-emails="slotProps.selected" />
+      </template>
+    </MailTable>
   </div>
 </template>
 
@@ -26,7 +30,7 @@ import _ from "lodash";
 import { IEmail } from "../types/email";
 import MailTable from "../components/MailTable.vue";
 import BulkActionBar from "../components/BulkActionBar.vue";
-import { useEmailSelection } from "../composables/use-email-selection";
+import { useEmailUtils } from "../composables/use-email-utils";
 
 export default defineComponent({
   setup() {
@@ -39,7 +43,7 @@ export default defineComponent({
     return {
       emails,
       selectedScreen,
-      emailSelection: useEmailSelection(),
+      emailSelection: useEmailUtils(),
     };
   },
   components: {
@@ -69,7 +73,7 @@ export default defineComponent({
   methods: {
     selectScreen(newScreen: string) {
       this.selectedScreen = newScreen;
-      this.emailSelection.clear();
+      // this.emailSelection.clear();
     },
     capitalize(word: string) {
       if (!word || !word.length) {

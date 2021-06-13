@@ -1,6 +1,6 @@
 <template>
   <div class="email-display">
-    <div class="toolbar">
+    <div class="mb-3">
       <v-btn @click="toggleArchive">
         {{ email.archived ? "Move to Inbox (e)" : "Archive (e)" }}
       </v-btn>

@@ -38,48 +38,52 @@ button {
   cursor: pointer;
 }
 
-input[type="checkbox"] {
-  -webkit-appearance: none;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  background: white;
-  border-radius: 2px;
-  border: 1px solid #555;
-  position: relative;
-  vertical-align: middle;
-  padding: 10px;
+.selected {
+  background-color: blueviolet!important;
 }
-input[type="checkbox"].partial-check {
-  background: #abc;
-}
-input[type="checkbox"]:checked {
-  background: #679;
-}
+
+//input[type="checkbox"] {
+//  -webkit-appearance: none;
+//  cursor: pointer;
+//  width: 24px;
+//  height: 24px;
+//  background: white;
+//  border-radius: 2px;
+//  border: 1px solid #555;
+//  position: relative;
+//  vertical-align: middle;
+//  padding: 10px;
+//}
+//input[type="checkbox"].partial-check {
+//  background: #abc;
+//}
+//input[type="checkbox"]:checked {
+//  background: #679;
+//}
 /* Modal */
-.modal,
-.overlay {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-}
-.overlay {
-  opacity: 0.5;
-  background-color: black;
-}
-.modal-card {
-  position: relative;
-  max-width: 80%;
-  margin: auto;
-  margin-top: 90px;
-  padding: 20px;
-  background-color: white;
-  min-height: 500px;
-  z-index: 10;
-  opacity: 1;
-}
+//.modal,
+//.overlay {
+//  width: 100%;
+//  height: 100%;
+//  position: fixed;
+//  left: 0;
+//  top: 0;
+//}
+//.overlay {
+//  opacity: 0.5;
+//  background-color: black;
+//}
+//.modal-card {
+//  position: relative;
+//  max-width: 80%;
+//  margin: auto;
+//  margin-top: 90px;
+//  padding: 20px;
+//  background-color: white;
+//  min-height: 500px;
+//  z-index: 10;
+//  opacity: 1;
+//}
 
 .clickable {
   cursor: pointer;
@@ -95,9 +99,7 @@ input[type="checkbox"]:checked {
   margin: auto;
   border-collapse: collapse;
 }
-.mail-table tr.read {
-  background-color: #eee;
-}
+
 .mail-table tr {
   height: 40px;
 }

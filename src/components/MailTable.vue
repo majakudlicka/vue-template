@@ -1,48 +1,29 @@
 <template>
   <div>
-    <table class="mail-table">
-      <tbody>
-        <tr
-          v-for="email in emails"
-          :key="email.id"
-          :class="[email.read ? 'read' : '', 'clickable']"
-        >
-          <td>
-            <v-checkbox
-              class="ml-2"
-              color="indigo"
-              :value="emailSelection.emails.includes(email)"
-              @click="emailSelection.toggle(email)"
-            ></v-checkbox>
-          </td>
-          <td @click="openEmail(email)">{{ email.from }}</td>
-          <td @click="openEmail(email)">
-            <p>
-              <strong>{{ email.subject }}</strong> - {{ email.body }}
-            </p>
-          </td>
-          <td class="date" @click="openEmail(email)">
-            {{ format(new Date(email.sentAt), "MMM do yyyy") }}
-          </td>
-          <td>
-            <v-btn size="x-small" @click="archiveEmail(email)">Archive</v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <ModalView
-      v-if="openedEmail"
-      :closeModal="
-        () => {
-          openedEmail = null;
-        }
-      "
+    <slot v-bind:selected="selected"> </slot>
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="emails"
+      show-select
+      @click:row="openEmail"
+      :item-class="(item) => (item.read ? '' : 'unread')"
     >
+      <template v-slot:item.sentAt="{ item }">
+        {{ format(new Date(item.sentAt), "MMM do yyyy") }}
+      </template>
+      <template v-slot:item.archive="{ item }">
+        <v-btn plain size="x-small" @click.stop="archiveEmail(item)"
+          >Archive</v-btn
+        >
+      </template>
+    </v-data-table>
+    <v-dialog v-if="openedEmail" v-model="modalOpen">
       <MailView
         :email="openedEmail"
         :changeEmail="(args) => changeEmail(openedEmail, args)"
       />
-    </ModalView>
+    </v-dialog>
   </div>
 </template>
 
@@ -51,8 +32,7 @@ import { IEmail } from "../types/email";
 import { defineComponent, PropType, ref } from "@vue/composition-api";
 import { format } from "date-fns";
 import MailView from "../components/MailView.vue";
-import ModalView from "../components/ModalView.vue";
-import { useEmailSelection } from "../composables/use-email-selection";
+import { useEmailUtils } from "../composables/use-email-utils";
 import axios from "axios";
 export default defineComponent({
   setup() {
@@ -60,15 +40,27 @@ export default defineComponent({
     return {
       format,
       openedEmail,
-      emailSelection: useEmailSelection(),
+      emailSelection: useEmailUtils(),
+    };
+  },
+  data() {
+    return {
+      selected: [],
+      modalOpen: false,
+      headers: [
+        { value: "from", text: "From" },
+        { value: "subject", text: "Title" },
+        { value: "sentAt", text: "Date" },
+        { value: "archive", text: "" },
+      ],
     };
   },
   components: {
-    MailView,
-    ModalView,
+    MailView
   },
   methods: {
     openEmail(email: IEmail) {
+      this.modalOpen = true;
       this.openedEmail = email;
       if (email) {
         email.read = true;
@@ -105,6 +97,7 @@ export default defineComponent({
         axios.put(`http://localhost:3000/emails/${email.id}`, email);
       }
       if (closeModal) {
+        this.modalOpen = false;
         this.openedEmail = null;
         return null;
       }
@@ -122,3 +115,14 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+tr.unread {
+  font-weight: bold;
+}
+
+.v-dialog {
+  background-color: white;
+  padding: 25px;
+}
+</style>
