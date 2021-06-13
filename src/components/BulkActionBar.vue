@@ -1,47 +1,40 @@
 <template>
-  <div class="bulk-action-bar">
-    <v-col>
-      <v-row align="center">
-        <span class="buttons">
-          <v-btn
-            outlined
-            size="small"
-            class="mr-1"
-            @click="emailSelection.markRead(selectedEmails)"
-            :disabled="selectedEmails.every((e) => e.read)"
-          >
-            Mark Read
-          </v-btn>
-          <v-btn
-            outlined
-            size="small"
-            class="mr-1"
-            @click="emailSelection.markUnread(selectedEmails)"
-            :disabled="selectedEmails.every((e) => !e.read)"
-          >
-            Mark Unread
-          </v-btn>
-          <v-btn
-            outlined
-            size="small"
-            v-if="selectedScreen === 'inbox'"
-            @click="emailSelection.archive(selectedEmails)"
-            :disabled="numberSelected === 0"
-          >
-            Archive
-          </v-btn>
-          <v-btn
-            outlined
-            size="small"
-            v-else
-            @click="emailSelection.moveToInbox(selectedEmails)"
-            :disabled="numberSelected === 0"
-          >
-            Move to Inbox
-          </v-btn>
-        </span>
-      </v-row>
-    </v-col>
+  <div class="text-right mb-2">
+    <span>
+      <v-btn
+        size="small"
+        class="mr-1"
+        @click="emailSelection.markRead(selectedEmails)"
+        :disabled="selectedEmails.every((e) => e.read)"
+      >
+        Mark Read
+      </v-btn>
+      <v-btn
+        size="small"
+        class="mr-1"
+        @click="emailSelection.markUnread(selectedEmails)"
+        :disabled="selectedEmails.every((e) => !e.read)"
+      >
+        Mark Unread
+      </v-btn>
+      <v-btn
+        size="small"
+        v-if="selectedScreen === 'inbox'"
+        @click="emailSelection.archive(selectedEmails)"
+        :disabled="numberSelected === 0"
+      >
+        Archive
+      </v-btn>
+      <v-btn
+        outlined
+        size="small"
+        v-else
+        @click="emailSelection.moveToInbox(selectedEmails)"
+        :disabled="numberSelected === 0"
+      >
+        Move to Inbox
+      </v-btn>
+    </span>
   </div>
 </template>
 
@@ -84,8 +77,6 @@ export default defineComponent({
       return this.numberSelected > 0 && !this.allAreSelected;
     },
   },
-  methods: {
-
-  },
+  methods: {},
 });
 </script>

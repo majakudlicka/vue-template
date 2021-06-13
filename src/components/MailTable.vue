@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="MailTable">
     <slot v-bind:selected="selected"> </slot>
     <v-data-table
       v-model="selected"
@@ -56,7 +56,7 @@ export default defineComponent({
     };
   },
   components: {
-    MailView
+    MailView,
   },
   methods: {
     openEmail(email: IEmail) {
@@ -117,10 +117,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-tr.unread {
-  font-weight: bold;
-}
+.MailTable {
+  cursor: pointer;
 
+  tr.unread {
+    font-weight: bold;
+  }
+}
 .v-dialog {
   background-color: white;
   padding: 25px;

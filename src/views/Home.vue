@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-<!--    <Suspense>-->
-<!--      <template #default>-->
-        <MailScreen />
-<!--      </template>-->
-<!--      <template #fallback> Loading... </template>-->
-<!--    </Suspense>-->
+    <MailScreen />
   </div>
 </template>
 

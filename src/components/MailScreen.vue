@@ -1,30 +1,36 @@
 <template>
   <div>
-    <v-btn
-      @click="selectScreen('inbox')"
-      :class="[selectedScreen === 'inbox' ? 'selected' : '']"
-      class="mr-2"
-    >
-      Inbox View
-    </v-btn>
-    <v-btn
-      @click="selectScreen('archive')"
-      :class="[selectedScreen === 'archive' ? 'selected' : '']"
-    >
-      Archived View
-    </v-btn>
-    <h1 class="mt-3">VMail {{ capitalize(selectedScreen) }}</h1>
+    <div class="mt-3 mb-3">
+      <v-btn
+        @click="selectScreen('inbox')"
+        :dark="selectedScreen === 'inbox'"
+        class="mr-2"
+      >
+        Inbox View
+      </v-btn>
+      <v-btn
+        @click="selectScreen('archive')"
+        :dark="selectedScreen === 'archive'"
+      >
+        Archived View
+      </v-btn>
+    </div>
+    <h1 class="mb-4">VMail {{ capitalize(selectedScreen) }}</h1>
 
     <MailTable :emails="filteredEmails">
       <template v-slot:default="slotProps">
-        <BulkActionBar :emails="filteredEmails" :selected-screen="selectedScreen" :selected-emails="slotProps.selected" />
+        <BulkActionBar
+          :emails="filteredEmails"
+          :selected-screen="selectedScreen"
+          :selected-emails="slotProps.selected"
+        />
       </template>
     </MailTable>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import _ from "lodash";
 import { IEmail } from "../types/email";
@@ -34,17 +40,20 @@ import { useEmailUtils } from "../composables/use-email-utils";
 
 export default defineComponent({
   setup() {
-    let emails = ref([]);
-    onMounted(async () => {
-      const res = await axios.get("http://localhost:3000/emails");
-      emails.value = res.data;
-    });
-    const selectedScreen = ref("inbox");
+    const emailSelection = useEmailUtils();
     return {
-      emails,
-      selectedScreen,
-      emailSelection: useEmailUtils(),
+      emailSelection,
     };
+  },
+  data() {
+    return {
+      selectedScreen: "inbox",
+      emails: [],
+    };
+  },
+  async mounted() {
+    const res = await axios.get("http://localhost:3000/emails");
+    this.emails = res.data;
   },
   components: {
     BulkActionBar,
@@ -73,7 +82,6 @@ export default defineComponent({
   methods: {
     selectScreen(newScreen: string) {
       this.selectedScreen = newScreen;
-      // this.emailSelection.clear();
     },
     capitalize(word: string) {
       if (!word || !word.length) {
