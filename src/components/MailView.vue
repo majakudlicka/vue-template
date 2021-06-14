@@ -1,13 +1,13 @@
 <template>
   <div class="EmailDisplay">
     <div class="mb-3">
-      <v-btn @click="toggleArchive">
+      <v-btn class="mr-2" @click="toggleArchive">
         {{ email.archived ? "Move to Inbox (e)" : "Archive (e)" }}
       </v-btn>
-      <v-btn @click="toggleRead">
+      <v-btn class="mr-2" @click="toggleRead">
         {{ email.read ? "Mark Unread (r)" : "Mark Read (r)" }}
       </v-btn>
-      <v-btn @click="goNewer">Newer (k)</v-btn>
+      <v-btn class="mr-2" @click="goNewer">Newer (k)</v-btn>
       <v-btn @click="goOlder">Older (j)</v-btn>
     </div>
 
@@ -51,8 +51,6 @@ export default defineComponent({
       { key: "]", fn: goOlderAndArchive },
     ]);
     return {
-      format,
-      marked,
       goOlder,
       goNewer,
       toggleRead,
@@ -68,6 +66,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+  },
+  methods: {
+    format,
+    marked,
   },
 });
 </script>

@@ -3,7 +3,7 @@ import { IEmail } from "../types/email";
 
 type voidFunc = (emails: Array<IEmail>) => void;
 
-// Various email utilities
+// Utils for email manipulation
 export const useEmailUtils = function (): {
   clear: voidFunc;
   markRead: voidFunc;
@@ -11,8 +11,7 @@ export const useEmailUtils = function (): {
   archive: voidFunc;
   moveToInbox: voidFunc;
 } {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const forSelected = (emails: Array<IEmail>, fn: Function) => {
+  const forSelected = (emails: Array<IEmail>, fn: (email: IEmail) => void) => {
     emails.forEach((email: IEmail) => {
       fn(email);
       axios.put(`http://localhost:3000/emails/${email.id}`, email);

@@ -2,15 +2,15 @@
   <div>
     <div class="mt-3 mb-3">
       <v-btn
-        @click="selectScreen('inbox')"
         :dark="selectedScreen === 'inbox'"
         class="mr-2"
+        @click="selectScreen('inbox')"
       >
         Inbox View
       </v-btn>
       <v-btn
-        @click="selectScreen('archive')"
         :dark="selectedScreen === 'archive'"
+        @click="selectScreen('archive')"
       >
         Archived View
       </v-btn>
@@ -18,6 +18,7 @@
     <h1 class="mb-4">VMail {{ capitalize(selectedScreen) }}</h1>
 
     <MailTable :emails="filteredEmails">
+      <!-- Example of scoped slot pattern -->
       <template v-slot:default="slotProps">
         <BulkActionBar
           :emails="filteredEmails"
@@ -32,19 +33,13 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
-import _ from "lodash";
+import sortBy from "lodash/sortBy";
+import capitalize from "lodash/capitalize";
 import { IEmail } from "../types/email";
 import MailTable from "../components/MailTable.vue";
 import BulkActionBar from "../components/BulkActionBar.vue";
-import { useEmailUtils } from "../composables/use-email-utils";
 
 export default defineComponent({
-  setup() {
-    const emailSelection = useEmailUtils();
-    return {
-      emailSelection,
-    };
-  },
   data() {
     return {
       selectedScreen: "inbox",
@@ -52,6 +47,7 @@ export default defineComponent({
     };
   },
   async mounted() {
+    // Mock api call
     const res = await axios.get("http://localhost:3000/emails");
     this.emails = res.data;
   },
@@ -61,7 +57,7 @@ export default defineComponent({
   },
   computed: {
     sortedEmails(): IEmail[] {
-      return _.sortBy(this.emails, "sendAt");
+      return sortBy(this.emails, "sendAt");
     },
     unarchivedEmails(): IEmail[] {
       return this.sortedEmails.filter((e: IEmail) => !e.archived);
@@ -80,14 +76,10 @@ export default defineComponent({
     },
   },
   methods: {
+    // Example of how to use external function in template
+    capitalize,
     selectScreen(newScreen: string) {
       this.selectedScreen = newScreen;
-    },
-    capitalize(word: string) {
-      if (!word || !word.length) {
-        return;
-      }
-      return word[0].toUpperCase() + word.slice(1);
     },
   },
 });

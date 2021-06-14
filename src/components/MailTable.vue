@@ -1,27 +1,40 @@
 <template>
   <div class="MailTable">
-    <slot v-bind:selected="selected"> </slot>
+    <slot :selected="selected"> </slot>
+    <!-- data table example -->
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="emails"
       show-select
-      @click:row="openEmail"
       :item-class="(item) => (item.read ? '' : 'unread')"
+      @click:row="openEmail"
     >
       <template v-slot:item.sentAt="{ item }">
         {{ format(new Date(item.sentAt), "MMM do yyyy") }}
       </template>
+      <!-- Example of how to pass custom data to the table -->
       <template v-slot:item.archive="{ item }">
-        <v-btn plain size="x-small" @click.stop="archiveEmail(item)"
+        <v-btn
+          v-if="!item.archived"
+          plain
+          size="x-small"
+          @click.stop="emailUtils.archive([item])"
           >Archive</v-btn
+        >
+        <v-btn
+          v-else
+          plain
+          size="x-small"
+          @click.stop="emailUtils.moveToInbox([item])"
+          >Move to Inbox</v-btn
         >
       </template>
     </v-data-table>
     <v-dialog v-if="openedEmail" v-model="modalOpen">
       <MailView
         :email="openedEmail"
-        :changeEmail="(args) => changeEmail(openedEmail, args)"
+        :change-email="(args) => changeEmail(openedEmail, args)"
       />
     </v-dialog>
   </div>
@@ -34,13 +47,13 @@ import { format } from "date-fns";
 import MailView from "../components/MailView.vue";
 import { useEmailUtils } from "../composables/use-email-utils";
 import axios from "axios";
+
 export default defineComponent({
   setup() {
-    let openedEmail = ref<null | IEmail>(null);
+    // Use of composition api for code reuse
+    const emailUtils = useEmailUtils();
     return {
-      format,
-      openedEmail,
-      emailSelection: useEmailUtils(),
+      emailUtils,
     };
   },
   data() {
@@ -53,12 +66,14 @@ export default defineComponent({
         { value: "sentAt", text: "Date" },
         { value: "archive", text: "" },
       ],
+      openedEmail: null as null | IEmail,
     };
   },
   components: {
     MailView,
   },
   methods: {
+    format,
     openEmail(email: IEmail) {
       this.modalOpen = true;
       this.openedEmail = email;
@@ -66,10 +81,6 @@ export default defineComponent({
         email.read = true;
         axios.put(`http://localhost:3000/emails/${email.id}`, email);
       }
-    },
-    archiveEmail(email: IEmail) {
-      email.archived = true;
-      axios.put(`http://localhost:3000/emails/${email.id}`, email);
     },
     changeEmail(
       email: IEmail,

@@ -1,6 +1,6 @@
 import { onBeforeUnmount } from "@vue/composition-api";
 
-// Generic function to bind events to a given keyboard key
+// Utility to bind events to a given keyboard key. Note the use of onBeforeUnmount
 export const useKeydown = function (
   keyCombos: { key: string; fn: () => void }[]
 ): void {

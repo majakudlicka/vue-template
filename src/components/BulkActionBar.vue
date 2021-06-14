@@ -4,33 +4,32 @@
       <v-btn
         size="small"
         class="mr-1"
-        @click="emailSelection.markRead(selectedEmails)"
         :disabled="selectedEmails.every((e) => e.read)"
+        @click="emailUtils.markRead(selectedEmails)"
       >
         Mark Read
       </v-btn>
       <v-btn
         size="small"
         class="mr-1"
-        @click="emailSelection.markUnread(selectedEmails)"
         :disabled="selectedEmails.every((e) => !e.read)"
+        @click="emailUtils.markUnread(selectedEmails)"
       >
         Mark Unread
       </v-btn>
       <v-btn
-        size="small"
         v-if="selectedScreen === 'inbox'"
-        @click="emailSelection.archive(selectedEmails)"
+        size="small"
         :disabled="numberSelected === 0"
+        @click="emailUtils.archive(selectedEmails)"
       >
         Archive
       </v-btn>
       <v-btn
-        outlined
-        size="small"
         v-else
-        @click="emailSelection.moveToInbox(selectedEmails)"
+        size="small"
         :disabled="numberSelected === 0"
+        @click="emailUtils.moveToInbox(selectedEmails)"
       >
         Move to Inbox
       </v-btn>
@@ -45,9 +44,10 @@ import { IEmail } from "../types/email";
 
 export default defineComponent({
   setup() {
-    const emailSelection = useEmailUtils();
+    // Use of composition api for code reuse
+    const emailUtils = useEmailUtils();
     return {
-      emailSelection,
+      emailUtils,
     };
   },
   props: {
@@ -68,15 +68,6 @@ export default defineComponent({
     numberSelected(): number {
       return this.selectedEmails.length;
     },
-    allAreSelected(): boolean {
-      return (
-        this.emails.length === this.numberSelected && this.numberSelected !== 0
-      );
-    },
-    partialSelection(): boolean {
-      return this.numberSelected > 0 && !this.allAreSelected;
-    },
   },
-  methods: {},
 });
 </script>
