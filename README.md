@@ -1,4 +1,4 @@
-# vue_kickstart
+# vue_template
 
 This repo is a boilerplate for Vue.js app. The repository contains two branches: 
 
